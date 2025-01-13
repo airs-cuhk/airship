@@ -1,5 +1,5 @@
 # airship_navigation
-**airship_navigation provides a navigation service interface for mobile platforms, allowing them to receive 2D navigation commands and perform path planning and movement functions. This module integrates nav2_simple_commander. By analyzing path planning results and movement status, airship_navigation can provide more detailed navigation status information. Design details can be found in this [video](https://www.youtube.com/watch?v=hFKO5pzH9Kc).**
+**airship_navigation provides a navigation service interface for mobile platforms, allowing them to receive 2D navigation commands and perform path planning and movement functions. This module integrates nav2_simple_commander. By analyzing path planning results and movement status, airship_navigation can provide more detailed navigation status information.**
 
 ## airship_navigation API Overview
 

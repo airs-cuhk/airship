@@ -1,5 +1,5 @@
 # airship_perception
-**This project combines open-vocabulary object detection and semantic segmentation to achieve open-vocabulary object segmentation. The project uses Grounding DINO and SAM to achieve the segmentation of specified objects. Design details can be found in this [video](https://www.youtube.com/watch?v=umQhfnI-7mc).**
+**This project combines open-vocabulary object detection and semantic segmentation to achieve open-vocabulary object segmentation. The project uses Grounding DINO and SAM to achieve the segmentation of specified objects.**
 
 * Grasping demo
 <img src="./doc/grasping_demo.jpg" width="60%">

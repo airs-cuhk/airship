@@ -8,3 +8,8 @@ repositories:
     type: git
     url: https://github.com/IDEA-Research/Grounded-Segment-Anything
     version: 126abe633ffe333e16e4a0a4e946bc1003caf757
+
+  Scale-Balanced-Grasp:
+    type: git
+    url: https://github.com/mahaoxiang822/Scale-Balanced-Grasp
+    version: 995d6f892474c91fbfcdf58f7d79589be4cbb41c

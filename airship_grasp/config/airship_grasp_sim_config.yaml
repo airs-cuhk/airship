@@ -1,0 +1,27 @@
+# D435 camera intrinsic 
+fx: 905.08
+fy: 904.02
+cx: 634.566
+cy: 378.112
+image_width: 1280
+image_height: 720
+depth_scale: 1000.0
+
+# Loading Parameters for GraspNet
+model_checkpoint_path: '/home/airsbot2/airsbot2_grasp/grasp_test/src/airship_grasp/lib/Scale_Balanced_Grasp/logs/log_full_model/checkpoint.tar'
+expand_mask_height: 350
+expand_mask_width: 350
+num_points: 20000
+num_grasp_pose: 10 
+# Loading Parameters for Elephant_Robot
+robot:
+  ip: "192.168.8.116"
+  port: 9000
+arm_maximum_reach: 380
+max_angle_select: -60
+min_angle_select: -120
+# Transformations
+cam2real_gripper_xyzrpy: [-0.0717, -0.073, -0.017, 0, -1.5708, -1.5708]
+est2virtual_gripper_xyzrpy: [0.0, 0.0, 0.0, 90.0, 0.0, 90.0]
+# Visualization
+debug_mode: False

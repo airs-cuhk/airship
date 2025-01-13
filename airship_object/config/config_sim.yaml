@@ -1,0 +1,11 @@
+# Config path
+path_config_object_depth: '/home/airsbot2/airship/src/airship/airship_object/config/config_object_depth_zed2.yaml'
+path_config_segmentation_service_client: '/home/airsbot2/airship/src/airship/airship_object/config/config_segmentation_service_client.yaml'
+
+# Subscribed topics
+topic_sub_depth: '/zed/zed_node/depth/depth_registered'
+topic_sub_image: '/zed/zed_node/left/image_rect_color'
+topic_sub_odometry: '/odom'
+
+# The message type of pose estimation currently supports nav_msgs/Odometry and geometry_msgs/PoseStamped
+message_type_odomtry: 'Odometry'

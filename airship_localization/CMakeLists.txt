@@ -11,12 +11,16 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(pcl_ros REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
 find_package(airship_description REQUIRED)
 
 set(dependencies
   rclcpp
   sensor_msgs
   pcl_ros
+  nav_msgs
+  tf2_ros
   airship_description
 )
 
@@ -35,8 +39,16 @@ endif()
 add_executable(rslidar_conversion_node src/rslidar_conversion_node.cpp)
 ament_target_dependencies(rslidar_conversion_node ${dependencies})
 
+add_executable(isaac_conversion_node src/isaac_conversion_node.cpp)
+ament_target_dependencies(isaac_conversion_node ${dependencies})
+
+add_executable(isaac_odom_to_tf_node src/isaac_odom_to_tf_node.cpp)
+ament_target_dependencies(isaac_odom_to_tf_node ${dependencies})
+
 install(TARGETS
   rslidar_conversion_node
+  isaac_conversion_node
+  isaac_odom_to_tf_node
   DESTINATION lib/${PROJECT_NAME}
 )
 

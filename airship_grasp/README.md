@@ -1,5 +1,5 @@
 # Airship_grasp
-**This module is a grasping system that integrates RGB and depth data from a camera to enable precise object manipulation. It utilizes a segmentation service to identify relevant objects and a grasp pose estimation algorithm to select the optimal grasping point, facilitating the automation of pick-and-place operations with a robotic arm. Design details can be found in this [video](https://www.youtube.com/watch?v=EuKlE1woDns).**
+This module is a grasping system that integrates RGB and depth data from a camera to enable precise object manipulation. It utilizes a segmentation service to identify relevant objects and a grasp pose estimation algorithm to select the optimal grasping point, facilitating the automation of pick-and-place operations with a robotic arm.
 
 ![grasp_scene](doc/airship_grasp.gif)
 ## Airship_grasp API Overview

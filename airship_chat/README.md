@@ -1,5 +1,5 @@
 # airship_chat
-**This project is an intelligent voice interaction system that allows users to conveniently control robots to perform tasks through voice commands. Design details can be found in this [video](https://www.youtube.com/watch?v=ushMzCUC4-g).**
+**This project is an intelligent voice interaction system that allows users to conveniently control robots to perform tasks through voice commands.**
 
 ![](./doc/demo.gif)
 

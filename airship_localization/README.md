@@ -1,5 +1,5 @@
 # airship_localization
-**This project integrates IMU sensor and LiDAR sensor to achieve mapping and localization of robot. Current V0.0 localization modules are depend on Cartographer project for fast deployment. Some adjustments are maked for coverting LiDAR sensen message data type into Cartographer inter data type. We also provide the offline map in "/map", for your own data, please follow the map saving instruction below and replace the "load_state_filename" address in ros launch command. Design details can be found in this [video](https://www.youtube.com/watch?v=w5GW9Snu-N0).**
+**This project integrates IMU sensor and LiDAR sensor to achieve mapping and localization of robot. Current V0.0 localization modules are depend on Cartographer project for fast deployment. Some adjustments are maked for coverting LiDAR sensen message data type into Cartographer inter data type. We also provide the offline map in "/map", for your own data, please follow the map saving instruction below and replace the "load_state_filename" address in ros launch command.**
 
 ![](./doc/demo.gif)
 

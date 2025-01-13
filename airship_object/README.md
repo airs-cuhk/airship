@@ -1,5 +1,5 @@
 # airship_object
-**This project integrates pose estimation and RGB-D cameras to achieve semantic segmentation and localization of objects in the environment. By utilizing point cloud clustering and grouping algorithms, the project accomplishes the annotation of objects in three-dimensional space, which is used to generate object navigation points. Design details can be found in this [video](https://www.youtube.com/watch?v=TzeuzeWfSLo).**
+**This project integrates pose estimation and RGB-D cameras to achieve semantic segmentation and localization of objects in the environment. By utilizing point cloud clustering and grouping algorithms, the project accomplishes the annotation of objects in three-dimensional space, which is used to generate object navigation points.**
 
 ![](./doc/locate_object.gif)
 

@@ -13,7 +13,7 @@ def generate_launch_description():
                             default_value=os.path.join(get_package_share_directory('airship_grasp'), 'config/airship_grasp_config.yaml'),
                             description='Path to the config file'
                         )
-    
+
     camera_node  =  IncludeLaunchDescription(
                         PythonLaunchDescriptionSource([os.path.join(
                             get_package_share_directory('realsense2_camera'), 'launch', 'rs_launch.py')]),
@@ -29,7 +29,8 @@ def generate_launch_description():
         package='airship_grasp', 
         executable='grasp_server', 
         output='screen',
-        parameters=[{'config': LaunchConfiguration('config')}]
+        parameters=[{'config': LaunchConfiguration('config')},
+                    {'use_isaac': LaunchConfiguration('use_isaac')}]
         )
 
     return LaunchDescription([

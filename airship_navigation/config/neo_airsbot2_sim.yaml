@@ -1,0 +1,282 @@
+bt_navigator:
+  ros__parameters:
+    use_sim_time: True
+    global_frame: map
+    robot_base_frame: base_footprint
+    odom_topic: /odom
+    bt_loop_duration: 10
+    default_nav_to_pose_bt_xml: "/home/airsbot2/airship/src/airship/airship_navigation/config/behavior_trees/navigate_to_pose_w_replanning_and_recovery.xml"
+    default_nav_through_poses_bt_xml: "/home/airsbot2/airship/src/airship/airship_navigation/config/behavior_trees/navigate_through_poses_w_replanning_and_recovery.xml"
+    default_server_timeout: 20
+    enable_groot_monitoring: True
+    groot_zmq_publisher_port: 1666
+    groot_zmq_server_port: 1667
+    plugin_lib_names:
+    - nav2_compute_path_to_pose_action_bt_node
+    - nav2_compute_path_through_poses_action_bt_node
+    - nav2_follow_path_action_bt_node
+    - nav2_back_up_action_bt_node
+    - nav2_spin_action_bt_node
+    - nav2_wait_action_bt_node
+    - nav2_clear_costmap_service_bt_node
+    - nav2_is_stuck_condition_bt_node
+    - nav2_goal_reached_condition_bt_node
+    - nav2_goal_updated_condition_bt_node
+    - nav2_initial_pose_received_condition_bt_node
+    - nav2_reinitialize_global_localization_service_bt_node
+    - nav2_rate_controller_bt_node
+    - nav2_distance_controller_bt_node
+    - nav2_speed_controller_bt_node
+    - nav2_truncate_path_action_bt_node
+    - nav2_goal_updater_node_bt_node
+    - nav2_recovery_node_bt_node
+    - nav2_pipeline_sequence_bt_node
+    - nav2_round_robin_node_bt_node
+    - nav2_transform_available_condition_bt_node
+    - nav2_time_expired_condition_bt_node
+    - nav2_distance_traveled_condition_bt_node
+    - nav2_single_trigger_bt_node
+    - nav2_is_battery_low_condition_bt_node
+    - nav2_navigate_through_poses_action_bt_node
+    - nav2_navigate_to_pose_action_bt_node
+    - nav2_remove_passed_goals_action_bt_node
+    - nav2_planner_selector_bt_node
+    - nav2_controller_selector_bt_node
+    - nav2_goal_checker_selector_bt_node
+
+bt_navigator_rclcpp_node:
+  ros__parameters:
+    use_sim_time: True
+
+controller_server:
+  ros__parameters:
+    use_sim_time: True
+    controller_plugins: ["FollowPath"]
+    controller_frequency: 50.0
+    failure_tolerance: 0.3
+    odom_topic: "odom"
+    controller_plugin_types: ["neo_local_planner2::NeoLocalPlanner"]
+    goal_checker_plugins: ["general_goal_checker"]
+    progress_checker_plugin: "progress_checker"
+
+    # Progress checker parameters
+    progress_checker:
+      plugin: "nav2_controller::SimpleProgressChecker"
+      required_movement_radius: 0.5
+      movement_time_allowance: 20.0
+    # Goal checker parameters
+    general_goal_checker:
+      plugin: "nav2_controller::SimpleGoalChecker"
+      xy_goal_tolerance: 0.10
+      yaw_goal_tolerance: 0.10
+      stateful: True
+    # neo parameters
+    FollowPath:
+      plugin: "neo_local_planner2::NeoLocalPlanner"
+      acc_lim_x : 0.35
+      acc_lim_y : 0.35
+      acc_lim_theta : 0.4
+      max_vel_x : 0.4
+      min_vel_x : -0.1
+      # max_vel_y : 0.0
+      # min_vel_y : 0.0
+      max_vel_y : 0.1
+      min_vel_y : -0.1
+      max_rot_vel : 1.0
+      min_rot_vel : 0.1
+      max_trans_vel : 0.4
+      min_trans_vel : 0.05
+      yaw_goal_tolerance : 0.05
+      xy_goal_tolerance : 0.05
+      goal_tune_time : 0.5
+      lookahead_time : 0.4
+      lookahead_dist : 1.0
+      start_yaw_error : 0.5
+      pos_x_gain : 1.0
+      # pos_y_gain : 0.0
+      pos_y_gain : 1.0
+      pos_y_yaw_gain : 3.0
+      yaw_gain : 3.0
+      static_yaw_gain : 3.0
+      cost_x_gain : 0.1
+      cost_y_gain : 0.1
+      cost_y_lookahead_dist : 0.0
+      # cost_y_lookahead_time : 0.0
+      cost_y_lookahead_time : 0.3
+      cost_yaw_gain : 2.0
+      low_pass_gain : 0.2
+      max_cost : 0.95
+      max_curve_vel : 0.3
+      max_goal_dist : 0.5
+      max_backup_dist : 0.2
+      min_stop_dist : 0.2
+      differential_drive : true
+      allow_reversing: false
+
+controller_server_rclcpp_node:
+  ros__parameters:
+    use_sim_time: True
+
+pointcloud_to_laserscan:
+  ros__parameters:
+    angle_min: -2.09
+    angle_max: 2.09
+    min_height: -0.24
+    max_height: 0.3
+    scan_time: 0.1
+    range_min: 0.1
+    range_max: 100.0
+    angle_increment: 0.0035
+    target_frame: rslidar
+    use_inf: true
+
+local_costmap:
+  local_costmap:
+    ros__parameters:
+      update_frequency: 5.0
+      publish_frequency: 5.0
+      transform_tolerance: 1.0
+      global_frame: odom
+      robot_base_frame: base_footprint
+      use_sim_time: True
+      rolling_window: true
+      width: 5
+      height: 5
+      resolution: 0.1
+      footprint: "[ [0.5, 0.4], [0.5, -0.4], [-0.5, -0.4], [-0.5, 0.4] ]"
+      plugins: ["voxel_layer", "inflation_layer"]
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        cost_scaling_factor: 1.0
+        inflation_radius: 0.8 
+      voxel_layer:
+        plugin: "nav2_costmap_2d::VoxelLayer"
+        enabled: True
+        publish_voxel_map: True
+        origin_z: 0.0
+        z_resolution: 0.1
+        z_voxels: 10
+        max_obstacle_height: 1.0
+        mark_threshold: 5
+        footprint_clearing_enabled: True
+        observation_sources: pointcloud
+        pointcloud:
+          topic: /rslidar_points
+          max_obstacle_height: 1.0
+          min_obstacle_height: 0.0
+          obstacle_max_range: 8.0
+          obstacle_min_range: 0.0
+          raytrace_max_range: 8.5
+          raytrace_min_range: 0.0
+          clearing: True
+          marking: True
+          data_type: "PointCloud2"
+      static_layer:
+        map_topic: /map_nav
+        map_subscribe_transient_local: True
+        footprint_clearing_enabled: True
+      always_send_full_costmap: True
+  local_costmap_client:
+    ros__parameters:
+      use_sim_time: True
+  local_costmap_rclcpp_node:
+    ros__parameters:
+      use_sim_time: True
+
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      update_frequency: 3.0
+      publish_frequency: 1.0
+      transform_tolerance: 1.0
+      global_frame: map
+      robot_base_frame: base_footprint
+      use_sim_time: True
+      footprint: "[ [0.5, 0.4], [0.5, -0.4], [-0.5, -0.4], [-0.5, 0.4] ]"
+      resolution: 0.1
+      track_unknown_space: true
+      plugins: ["static_layer", "voxel_layer", "inflation_layer"]
+      voxel_layer:
+        plugin: "nav2_costmap_2d::VoxelLayer"
+        enabled: True
+        publish_voxel_map: True
+        origin_z: 0.0
+        z_resolution: 0.1
+        z_voxels: 10
+        max_obstacle_height: 1.0
+        mark_threshold: 5
+        footprint_clearing_enabled: True
+        observation_sources: pointcloud
+        pointcloud:
+          topic: /rslidar_points
+          max_obstacle_height: 1.0
+          min_obstacle_height: 0.0
+          obstacle_max_range: 8.0
+          obstacle_min_range: 0.0
+          raytrace_max_range: 8.5
+          raytrace_min_range: 0.0
+          clearing: True
+          marking: True
+          data_type: "PointCloud2"
+      static_layer:
+        map_topic: /map_nav
+        plugin: "nav2_costmap_2d::StaticLayer"
+        map_subscribe_transient_local: True
+        footprint_clearing_enabled: True
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        cost_scaling_factor: 3.0
+        inflation_radius: 0.8
+      always_send_full_costmap: True
+  global_costmap_client:
+    ros__parameters:
+      use_sim_time: True
+  global_costmap_rclcpp_node:
+    ros__parameters:
+      use_sim_time: True
+
+planner_server:
+  ros__parameters:
+    expected_planner_frequency: 20.0
+    use_sim_time: True
+    planner_plugins: ["GridBased"]
+    GridBased:
+      plugin: "nav2_navfn_planner/NavfnPlanner"
+      tolerance: 0.5
+      use_astar: false
+      allow_unknown: false
+
+planner_server_rclcpp_node:
+  ros__parameters:
+    use_sim_time: True
+
+behavior_server:
+  ros__parameters:
+    costmap_topic: local_costmap/costmap_raw
+    footprint_topic: local_costmap/published_footprint
+    cycle_frequency: 10.0
+    recovery_plugins: ["spin", "backup", "wait"]
+    spin:
+      plugin: "nav2_behaviors/Spin"
+    backup:
+      plugin: "nav2_behaviors/BackUp"
+    wait:
+      plugin: "nav2_behaviors/Wait"
+    global_frame: odom
+    robot_base_frame: base_footprint
+    transform_timeout: 0.1
+    use_sim_time: True
+    simulate_ahead_time: 2.0
+    max_rotational_vel: 1.0
+    min_rotational_vel: 0.4
+    rotational_acc_lim: 3.2
+
+waypoint_follower:
+  ros__parameters:
+    loop_rate: 20
+    stop_on_failure: false
+    waypoint_task_executor_plugin: "wait_at_waypoint"   
+    wait_at_waypoint:
+      plugin: "nav2_waypoint_follower::WaitAtWaypoint"
+      enabled: True
+      waypoint_pause_duration: 200

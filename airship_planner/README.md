@@ -1,5 +1,5 @@
 # airship_planner
-**This package implements a task planner leveraging LLMs. It supports both using OpenAI's API to access GPT modules and utilizing the Ollam API to access open-source LLMs, such as LLAMA. Design details can be found in this [video](https://www.youtube.com/watch?v=hZjcxxz1_8E).**
+**This package implements a task planner leveraging LLMs. It supports both using OpenAI's API to access GPT modules and utilizing the Ollam API to access open-source LLMs, such as LLAMA.**
 
 ## airship_planner API Overview
 ### llm_planner_node

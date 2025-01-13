@@ -1,9 +1,7 @@
 # AIRSHIP: Empowering Intelligent Robots through Embodied AI, Stronger United, Yet Distinct.
 
-Welcome to AIRSHIP GitHub page!
-[AIRSHIP](https://airs.cuhk.edu.cn/en/airship) is an open-sourced embodied AI robotic software stack to empower various forms of intelligent robots. 
-
-Official website is [here](https://airs.cuhk.edu.cn/en/airship). Videos about the system design can be found [here](https://www.youtube.com/watch?v=MnlVE-DqtIk&t=8s). 
+Welcome to AIRSHIP GitLab page!
+[AIRSHIP](http://airs.airship.com) is an open-sourced embodied AI robotic software stack to empower various forms of intelligent robots. 
 
 ## Table of Contents
 
@@ -41,9 +39,10 @@ AIRSHIP is distinguished by the following characteristics:
   * LiDAR: RoboSense Helios 32
   * RGBD camera for navigation: Stereo Labs Zed2 
 ### Wheeled robot
-  * [AirsBot2](https://airs.cuhk.edu.cn/en/airship)
+  * [AirsBot2](http://airs.airship.com)
 ### Robotic arm and gripper
   * Elephant Robotics mycobot 630
+  * Elephant Robotics pro adaptive gripper
 ### Software on Jetson Orin AGX
   * Jetpack SDK 6.0 
   * Ubuntu 22.04
@@ -91,45 +90,55 @@ The grasping software pipeline operates as follows: GroundingDINO receives an im
 If you don't want to use docker, please refer to the setup instruction in "./docs/README.md".
 
 ### System setup on Nvidia Orin with Docker
-0. Log in to your Nvidia Orin.
-1. Install Docker and NVIDIA Container Toolkit
-```
-bash script/software_setup/install_docker.sh
+0. Log in to your Nvidia Orin
+
+1. Download AIRSHIP package from GitLab
+```shell
+# ${DIR_AIRSHIP} is the directory you create for the AIRSHIP package. 
+# Here we take $HOME/airship as an example. 
+DIR_AIRSHIP=$HOME/airship
+mkdir -p ${DIR_AIRSHIP}/src
+cd ${DIR_AIRSHIP}/src
+git clone https://gitlab.airs.org.cn/embodied-ai/airship.git
 ```
 
-2. Pull Docker image
+2. Install Docker and NVIDIA Container Toolkit
+```shell
+bash ${DIR_AIRSHIP}/src/airship/scripts/software_setup/install_docker.sh
+```
+
+3. Pull Docker image
 * [BaiDuYun_download_link](https://pan.baidu.com/s/1PqKPJXVOEegFnDOlRRsk4Q?pwd=39mz)
 * [Onedrive_download_link](https://cuhko365-my.sharepoint.com/:u:/g/personal/shaopengtao_cuhk_edu_cn/EaBtYNHriv9BhuS0pGesCGMB4ReneHuF_ywH81H_lRU81g?e=s1UzEq)
 ```shell
+# Assuming the docker image is under $HOME.
 sudo systemctl enable docker
 sudo systemctl start docker
-docker load -i airship_image.tar
-docker images
+docker load -i $HOME/airship_image.tar
 ```
 
-3. Create Docker container
+4. Create Docker container
 ```shell
 xhost + 
-docker run -it --runtime=nvidia --gpus all --privileged --network=host -e DISPLAY=$DISPLAY -v /dev:/dev -v ${local_address_you_wish_to_map}:/home/airsbot2/airship/ --name docker_airship -d ${image_id_pull_above}
+# Use the docker images command to view the image ID
+docker images
+docker run -it --runtime=nvidia --gpus all --privileged --network=host -e DISPLAY=$DISPLAY -v /dev:/dev -v ${DIR_AIRSHIP}:/home/airsbot2/airship --name docker_airship -d ${image_id_pull_above}
 docker start docker_airship
 docker exec -it docker_airship /bin/bash
 ```
 
-4. Download AIRSHIP package from GitHub
-```shell
-# ${DIR_AIRSHIP} is the directory you create for AIRSHIP pakcage
-mkdir -p ${DIR_AIRSHIP}/src
-cd ${DIR_AIRSHIP}/src
-git clone https://github.com/airs-admin/airship.git
-```
 5. Download dependencies and weights
+```shell
+sudo pip install vcstool
+cd ${DIR_AIRSHIP}/src
+vcs-import < airship/dependencies.yaml
+```
+
 * airship_grasp
 ```shell
-cd ${DIR_AIRSHIP}/src/airship/airship_grasp/lib
-git clone https://github.com/mahaoxiang822/Scale-Balanced-Grasp
-mv Scale-Balanced-Grasp Scale_Balanced_Grasp
-cd Scale_Balanced_Grasp
-cp ${DIR_AIRSHIP}/src/airship/airship_grasp/doc/3rd_party/requirements.txt requirements.txt
+mv ${DIR_AIRSHIP}/src/Scale-Balanced-Grasp ${DIR_AIRSHIP}/src/airship/airship_grasp/lib/Scale_Balanced_Grasp
+cd ${DIR_AIRSHIP}/src/airship/airship_grasp/lib/Scale_Balanced_Grasp
+cp ${DIR_AIRSHIP}/src/airship/airship_grasp/doc/3rd_party/requirements.txt ${DIR_AIRSHIP}/src/airship/airship_grasp/lib/Scale_Balanced_Grasp/requirements.txt
 ```
 
 Download the tolerance labels from [Google Drive](https://drive.google.com/file/d/1DcjGGhZIJsxd61719N0iWA7L6vNEK0ci/view?usp=sharing)/[Baidu Pan](https://pan.baidu.com/s/1HN29P-csHavJF-R_wec6SQ) and run:
@@ -142,8 +151,8 @@ tar -xvf tolerance.tar
 
 ```shell
 # Replace files in knn
-cp ${DIR_AIRSHIP}/src/airship/airship_grasp/doc/3rd_party/knn.h src/knn.h 
-cp ${DIR_AIRSHIP}/src/airship/airship_grasp/doc/3rd_party/vision.h src/cuda/vision.h
+cp ${DIR_AIRSHIP}/src/airship/airship_grasp/doc/3rd_party/knn.h ${DIR_AIRSHIP}/src/airship/airship_grasp/lib/Scale_Balanced_Grasp/knn/src/knn.h 
+cp ${DIR_AIRSHIP}/src/airship/airship_grasp/doc/3rd_party/vision.h ${DIR_AIRSHIP}/src/airship/airship_grasp/lib/Scale_Balanced_Grasp/knn/src/cuda/vision.h
 
 # Download graspnetAPI
 cd ..
@@ -156,20 +165,9 @@ cd ../..
 git clone https://github.com/elephantrobotics/pymycobot.git
 ```
 
-* airship_navigation
-```shell
-# Install local planner
-## airship_navigation utilizes neo_local_planner2 as the local planner. We retrieve the code from Neobotix's GitHub repository and compile it from the source.
-cd ${DIR_AIRSHIP}/src
-git clone https://github.com/neobotix/neo_local_planner2.git -b humble
-```
-
 * airship_perception
-
 ```shell
 # Install Grounded-Segment-Anything
-cd ${DIR_AIRSHIP}/src
-vcs-import < airship/dependencies.yaml
 cp -r ${DIR_AIRSHIP}/src/Grounded-Segment-Anything/* ${DIR_AIRSHIP}/src/airship/airship_perception/lib/
 
 # Download weights
@@ -178,6 +176,7 @@ mkdir models
 cd models
 
 # Download bert weights
+sudo apt-get install git-lfs
 git lfs install
 git clone https://huggingface.co/google-bert/bert-base-uncased
 
@@ -294,7 +293,7 @@ ros2 launch rslidar_sdk start.py
 ros2 launch hipnuc_imu imu_spec_msg.launch.py
 ```
 
-* airship_loc
+* airship_localization
 ```shell
 cd ${DIR_AIRSHIP}
 source install/local_setup.bash
@@ -345,6 +344,13 @@ cd ${DIR_AIRSHIP}
 source install/local_setup.bash
 # Remember to setup your microphone device and update your openai_api_key.
 ros2 launch airship_chat run_airship_chat_node.launch.py
+```
+
+* airship_object 
+```shell
+cd ${DIR_AIRSHIP}
+source install/local_setup.bash
+ros2 launch airship_object run_object_map_node.launch.py 
 ```
 
 # Acknowledgement

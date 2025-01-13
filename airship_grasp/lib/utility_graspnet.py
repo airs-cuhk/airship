@@ -66,22 +66,27 @@ class UtilityGraspNet:
         new_mask[row_start:row_end, col_start:col_end] = 255
         return new_mask
     
-    def get_3d_center_mask(self, original_mask, depth):
+    def get_3d_center_mask(self, original_mask, depth, use_isaac_sim):
         """Compute the 3D center point of the mask."""
         mask_bool = original_mask > 0
         rows, cols = np.where(mask_bool)
         center_row = int(np.mean(rows))
         center_col = int(np.mean(cols))
         center_depth = depth[center_row, center_col]
-        points_z = center_depth / self.camera_info.scale
+        if use_isaac_sim:
+            points_z = center_depth
+        else:
+            points_z = center_depth / self.camera_info.scale
         points_x = (center_row - self.camera_info.cx) * points_z / self.camera_info.fx
         points_y = (center_col - self.camera_info.cy) * points_z / self.camera_info.fy
         return np.stack([points_x, points_y, points_z], axis=-1)
 
-    def get_and_process_data(self, rgb, depth, mask):
+    def get_and_process_data(self, rgb, depth, mask, use_isaac_sim):
         """Process RGB, depth, and mask data to prepare for grasp prediction."""
         color = rgb
         workspace_mask = mask
+        if use_isaac_sim:
+            depth = depth * self.camera_info.scale
         cloud = create_point_cloud_from_depth_image(depth, self.camera_info, organized=True)
         new_mask = self.create_centered_box_mask(workspace_mask, self.expand_mask_width, self.expand_mask_height)
         mask = (new_mask > 0) & (depth > 0)
