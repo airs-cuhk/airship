@@ -211,7 +211,7 @@ We use [Ollama](www.ollama.com) to provide LLM service.
 * Prerequisites: 
   * A properly configured local network.
   * Lamma3.1 70B model.
-  * A server equipped with powerful Nvidia GPUs. We have successfully run LLaMA 3.1 70B on two Nvidia A1000 cards.
+  * A server equipped with powerful Nvidia GPUs. We have successfully run LLaMA 3.1 70B on two Nvidia A6000 cards.
 
 * Ollama configurations
 ```shell
